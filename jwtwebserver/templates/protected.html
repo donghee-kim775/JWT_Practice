@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>보호된 페이지</title>
+</head>
+<body>
+    <h2>JWT 인증된 페이지</h2>
+    <button id="getDataBtn">보호된 데이터 요청</button>
+    <pre id="result"></pre>
+
+    <script>
+        document.getElementById("getDataBtn").addEventListener("click", async () => {
+            const token = localStorage.getItem("jwt_token");
+            if (!token) {
+                alert("토큰이 없습니다. 로그인 먼저 하세요!");
+                return;
+            }
+
+            const response = await fetch("/api/protected", {
+                method: "GET",
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            const data = await response.json();
+            document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+        });
+    </script>
+</body>
+</html>
